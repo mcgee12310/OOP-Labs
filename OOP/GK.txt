@@ -1,0 +1,200 @@
+ngày 12/12 ta thi gki, lớp chia thành 2 kíp, mỗi kíp khoảng 45-60 phút, ko dùng tài liệu, ds các kíp sẽ gửi lên sau, cấu trúc đề thi gồm: 5 câu trắc nghiệm + 3 câu lý thuyết (nêu các đặc điểm chính của LTHDT, cho ví dụ bằng Java; thế nào là truyền tham trị và truyền tham chiếu trong Java, cho ví dụ; phân biệt kế thừa và kết tập) + 1 bài lập trình Java String/StringBuffer + 1 bài lập trình Java cài đặt các lớp theo một sơ đồ UML cho trước.
+
+I. Nêu các đặc điểm chính của LTHDT:
+- Lập trình hướng đối tượng thể hiện các thành phần của bài toán là các “đối tượng” (object) tương tácvới nhau.
+1. Đóng gói (Encapsulation)
+- Đóng gói là việc gói gọn dữ liệu và các phương thức liên quan trong một lớp, bảo vệ dữ liệu khỏi truy cập không mong muốn từ bên ngoài.
+- Chỉ các phương thức trong lớp mới có thể truy cập hoặc sửa đổi dữ liệu.
+class Person {
+    private String name; // Thuộc tính private
+    private int age;
+
+    // Constructor
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Getter và Setter
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+} 
+public class Main {
+    public static void main(String[] args) {
+        Person person = new Person("Hiếu", 21);
+        System.out.println("Name: " + person.getName());
+        person.setAge(22);
+        System.out.println("Age: " + person.getAge());
+    }
+}
+2. Kế thừa (Inheritance)
+- Một lớp con kế thừa các thuộc tính và phương thức từ lớp cha.
+- Tái sử dụng mã nguồn, giảm trùng lặp, tăng khả năng mở rộng.
+class Animal {
+    public void eat() {
+        System.out.println("This animal eats food.");
+    }
+}
+
+class Dog extends Animal {
+    public void bark() {
+        System.out.println("The dog barks.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.eat(); // Gọi phương thức của lớp cha
+        dog.bark(); // Gọi phương thức của lớp con
+    }
+}
+3. Đa hình (Polymorphism)
+- Đối tượng có thể biểu diễn dưới nhiều hình thức khác nhau.
+- Có hai loại:
+	+ Đa hình tại thời điểm biên dịch (Compile-time): Thực hiện overloading phương thức.
+	+ Đa hình tại thời điểm chạy (Runtime): Thực hiện overriding phương thức.
+class Animal {
+    public void sound() {
+        System.out.println("This animal makes a sound.");
+    }
+}
+
+class Cat extends Animal {
+    @Override
+    public void sound() {
+        System.out.println("The cat meows.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal myAnimal = new Cat(); // Runtime Polymorphism
+        myAnimal.sound();
+    }
+}
+4. Trừu tượng (Abstraction)
+- Tập trung vào những tính năng cốt lõi, che giấu chi tiết cài đặt.
+abstract class Shape {
+    abstract void draw();
+}
+
+class Circle extends Shape {
+    @Override
+    void draw() {
+        System.out.println("Drawing a circle.");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Shape shape = new Circle();
+        shape.draw();
+    }
+}
+
+II. Thế nào là truyền tham trị và truyền tham chiếu trong Java, cho ví dụ
+1. Truyền tham trị (Pass by Value): Truyền giá trị/bản sao của tham số thực.
+- Với tham số có kiểu dữ liệu tham trị (kiểu dữ liệu nguyên thủy): Truyền giá trị/bản sao của các biến nguyên thủy truyền vào
+- Với  tham số có kiểu dữ liệu tham chiếu (mảng và đối tượng): Truyền giá trị/bản sao của tham chiếu gốc truyền vào
+=> Thay đổi tham số hình thức không làm ảnh hưởng đến tham số thực
+public class Main {
+    public static void changeValue(int number) {
+        number = 50; // Thay đổi giá trị của tham số local
+    }
+
+    public static void main(String[] args) {
+        int x = 10;
+        changeValue(x); // Truyền bản sao giá trị của x
+        System.out.println("Value of x: " + x); // x vẫn là 10
+    }
+}
+2. Truyền tham chiếu (Pass by Reference): Thực ra là truyền bản sao của tham chiếu gốc, chứ không phải truyền tham chiếu gốchoặc truyền đối tượng
+- Tham số bên trong phương thức vẫn tham chiếu đến cùng một đối tượng trong bộ nhớ.
+- Nếu thay đổi trạng thái của đối tượng thông qua tham chiếu này, sự thay đổi sẽ phản ánh trên đối tượng gốc.
+class Person {
+    String name;
+
+    public Person(String name) {
+        this.name = name;
+    }
+}
+
+public class Main {
+    public static void changeName(Person person) {
+        person.name = "Hiếu"; // Thay đổi thuộc tính của đối tượng
+    }
+
+    public static void main(String[] args) {
+        Person p = new Person("Khắc");
+        changeName(p); // Truyền tham chiếu đến đối tượng
+        System.out.println("Name: " + p.name); // Giá trị name thay đổi thành "Hiếu"
+    }
+}
+III. phân biệt kế thừa và kết tập
+1. Kết tập (aggregation):
+- Tạo ra các đối tượng của các lớp có sẵn trong lớp mới ->thành viên của lớp mới.
+- Kết tập tái sử dụng thông qua đối tượng
+- Lớp mới: Lớp toàn thể(Aggregate/Whole), 
+- Lớp cũ: Lớp thành phần (Part).
+- Lớp toàn thể  chứa đối tượng của lớp thành phần
+ + Là một phần (is-a-part of) của lớp toàn thể
+ + Tái sử dụng các thành phần dữ liệu và các 
+hành vi của lớp thành phần thông qua đối 
+tượng thành phần
+2. Kế thừa
+- Tạo lớp mới bằng cách phát triển lớp đã có.
+- Lớp mới kế thừa những gì đã có trong lớp cũ và phát triển những tính năng mới.
+- Lớp cũ: Lớp cha (parent, superclass), lớp cơ sở (base class)
+- Lớp mới: Lớp con (child, subclass), lớp dẫn xuất (derived class)
+- Lớp con:
+ + Là một loại (is-a-kind-of) của lớp cha
+ + Tái sử dụng bằng cách kế thừa các thành phần dữ liệu và các hành vi của lớp cha
+3. So sánh kết tập và kế thừa?
+- Giống nhau: Đều là kỹ thuật trong OOP để tái sử dụng mã nguồn
+- Khác nhau:
+Kế thừa
+	Kế thừa tái sử dụng thông qua lớp
+	Tạo lớp mới bằng cách phát triển lớp đã có.
+	Lớp con kế thừa dữ liệu và hành vi của lớp cha.
+	Quan hệ: "Là một loại" (is a kind of).
+	Ví dụ: Ô tô là một loại phương tiện vận tải.
+Kết tập
+	Kết tập tái sử dụng thông qua đối tượng
+	Tạo ra lớp mới là tập hợp các đối tượng của các lớp đã có.
+	Lớp toàn thể có thể sử dụng dữ liệu và hành vi thông qua các đối tượng thành phần.
+	Quan hệ: "Là một phần" (is a part of).
+	Ví dụ: Bánh xe là một phần của ô tô.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
